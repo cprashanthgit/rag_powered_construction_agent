@@ -96,7 +96,7 @@ def rerank(
     top_docs = [doc for _, doc in scored[:top_n]]
 
     # Debug log: show scores
-    print(f"[RERANKER] Scored {len(docs)} docs → kept top {top_n}:")
+    print(f"[RERANKER] Scored {len(docs)} docs -> kept top {top_n}:")
     for i, (score, doc) in enumerate(scored[:top_n]):
         src = doc.metadata.get("source", "?")
         pg  = doc.metadata.get("page",   "?")

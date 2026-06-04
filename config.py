@@ -38,6 +38,26 @@ from dotenv import load_dotenv
 # ── Load .env file ─────────────────────────────────────────────────────────────
 load_dotenv(override=True)
 
+# ── LangSmith Observability ────────────────────────────────────────────────────
+# Enables full trace-level visibility: retrieval, reranking, generation.
+# Free tier: 5,000 traces/month at https://smith.langchain.com
+# Set LANGCHAIN_TRACING_V2=true in .env to activate.
+LANGCHAIN_TRACING_V2: str = os.getenv("LANGCHAIN_TRACING_V2", "false").strip().lower()
+LANGCHAIN_API_KEY:    str = os.getenv("LANGCHAIN_API_KEY",    "")
+LANGCHAIN_PROJECT:    str = os.getenv("LANGCHAIN_PROJECT",    "cnst-rag-assistant")
+LANGCHAIN_ENDPOINT:   str = os.getenv("LANGCHAIN_ENDPOINT",   "https://api.smith.langchain.com")
+
+if LANGCHAIN_TRACING_V2 == "true" and LANGCHAIN_API_KEY:
+    os.environ["LANGCHAIN_TRACING_V2"] = "true"
+    os.environ["LANGCHAIN_API_KEY"]    = LANGCHAIN_API_KEY
+    os.environ["LANGCHAIN_PROJECT"]    = LANGCHAIN_PROJECT
+    os.environ["LANGCHAIN_ENDPOINT"]   = LANGCHAIN_ENDPOINT
+    _langsmith_status = f"ENABLED  (project: {LANGCHAIN_PROJECT})"
+elif LANGCHAIN_TRACING_V2 == "true" and not LANGCHAIN_API_KEY:
+    _langsmith_status = "DISABLED (LANGCHAIN_TRACING_V2=true but LANGCHAIN_API_KEY not set)"
+else:
+    _langsmith_status = "DISABLED (set LANGCHAIN_TRACING_V2=true in .env to enable)"
+
 # ── Valid option sets ──────────────────────────────────────────────────────────
 VALID_LLM_BACKENDS    = ["huggingface", "openai", "ollama"]
 VALID_EMB_BACKENDS    = ["huggingface", "openai"]
@@ -177,6 +197,7 @@ def print_config_summary() -> None:
     print(f"  Chunk Overlap     : {CHUNK_OVERLAP}")
     print(f"  Top-K (pool)      : {TOP_K}  (candidates from BM25 + dense)")
     print(f"  Reranker Top-N    : {RERANKER_TOP_N}  (final docs sent to LLM)")
+    print(f"  LangSmith Tracing : {_langsmith_status}")
     print("=" * 65)
 
 
