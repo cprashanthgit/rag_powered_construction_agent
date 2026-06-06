@@ -1,0 +1,29 @@
+apiVersion: 1
+
+# ── Auto-provisioned Data Sources ──────────────────────────────────────
+# Grafana reads this file on startup and creates these data sources
+# automatically. You will NOT need to add them manually in the UI.
+
+datasources:
+
+  # ── Prometheus ─────────────────────────────────────────────────────
+  # Used for all RAG metrics: query count, latency, cache hits, etc.
+  - name: Prometheus
+    type: prometheus
+    url: http://prometheus:9090    # uses Docker service name (not localhost)
+    isDefault: true
+    editable: false
+
+  # ── PostgreSQL ─────────────────────────────────────────────────────
+  # Used for business metrics: feedback satisfaction %, query logs, etc.
+  - name: PostgreSQL
+    type: postgres
+    url: postgres:5432             # uses Docker service name
+    database: cnst_rag
+    user: cnst_user
+    secureJsonData:
+      password: "${POSTGRES_PASSWORD:-devpassword123}"
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1600        # PostgreSQL 16
+    editable: false

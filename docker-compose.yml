@@ -1,0 +1,90 @@
+# ══════════════════════════════════════════════════════════════════════
+#  Construction RAG Assistant — Full Infrastructure Stack
+#  Start everything: docker-compose up -d
+#  Stop everything:  docker-compose down
+#  Wipe volumes:     docker-compose down -v
+# ══════════════════════════════════════════════════════════════════════
+
+services:
+
+  # ── Phase 3: Semantic Cache & Session Memory ────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: cnst_redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ── Phase 4: User Database & Authentication ─────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: cnst_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB:       cnst_rag
+      POSTGRES_USER:     cnst_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Auto-runs schema.sql on first boot (only when data volume is empty)
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cnst_user -d cnst_rag"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Phase 5: Metrics Collection ─────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: cnst_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=14d'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    extra_hosts:
+      # Allows Prometheus (inside Docker) to reach the API running on your host machine
+      - "host.docker.internal:host-gateway"
+
+  # ── Phase 5: Observability Dashboard ───────────────────────────────
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cnst_grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - postgres
+    environment:
+      GF_SECURITY_ADMIN_USER:     admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP:     "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      # Auto-provision data sources (Prometheus + PostgreSQL)
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+      # Auto-provision dashboards
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  postgres_data:
+  prometheus_data:
+  grafana_data:

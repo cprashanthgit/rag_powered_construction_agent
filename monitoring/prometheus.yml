@@ -1,0 +1,17 @@
+global:
+  scrape_interval:     15s   # Pull metrics from each target every 15 seconds
+  evaluation_interval: 15s
+
+scrape_configs:
+  # ── Construction RAG API ────────────────────────────────────────────
+  # Prometheus scrapes /metrics on your FastAPI app (Phase 5 wires this up).
+  # host.docker.internal resolves to your Windows host machine from inside Docker.
+  - job_name: 'cnst_rag_api'
+    static_configs:
+      - targets: ['host.docker.internal:8000']
+    metrics_path: '/metrics'
+
+  # ── Prometheus self-monitoring ──────────────────────────────────────
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

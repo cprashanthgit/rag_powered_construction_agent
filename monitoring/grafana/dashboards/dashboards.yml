@@ -1,0 +1,17 @@
+apiVersion: 1
+
+# ── Dashboard Provisioning ─────────────────────────────────────────────
+# Tells Grafana to scan this folder for .json dashboard files and
+# load them automatically on startup.
+# You can still edit dashboards in the UI — changes won't be overwritten.
+
+providers:
+  - name: 'Construction RAG Dashboards'
+    orgId: 1
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: false
