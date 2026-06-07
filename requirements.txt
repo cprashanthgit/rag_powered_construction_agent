@@ -46,9 +46,26 @@ pypdf==5.4.0
 langsmith>=0.1.0                 # LangSmith AI tracing (free tier: 5k traces/month)
 
 # ------------------------------------------------------------------------------
-# PHASE 2+ - Infrastructure (Docker, Redis, Postgres, Monitoring)
+# PHASE 3 - Redis (session memory + semantic cache)
 # ------------------------------------------------------------------------------
-redis>=5.0.3                     # Phase 3: Semantic Cache & Memory
-langchain-redis>=0.2.0           # Phase 3: LangChain Redis adapter
-asyncpg>=0.29.0                  # Phase 4: Async PostgreSQL driver
-prometheus-client>=0.20.0        # Phase 5: Prometheus metrics exporter
+redis>=5.0.3                     # Redis client for session store and semantic cache
+numpy>=1.26.0                    # Cosine similarity in semantic_cache.py
+
+# ------------------------------------------------------------------------------
+# PHASE 4 - PostgreSQL + JWT Auth
+# ------------------------------------------------------------------------------
+asyncpg>=0.29.0                  # Async PostgreSQL driver
+bcrypt>=4.0.0                    # Password hashing for user accounts
+PyJWT>=2.8.0                     # JWT token encode/decode
+
+# ------------------------------------------------------------------------------
+# PHASE 5 - Prometheus Metrics
+# ------------------------------------------------------------------------------
+prometheus-client>=0.20.0        # Prometheus metrics exporter
+prometheus-fastapi-instrumentator>=6.1.0  # Auto-exposes /metrics on FastAPI
+
+# ------------------------------------------------------------------------------
+# PHASE 6 - RAGAS Evaluation
+# ------------------------------------------------------------------------------
+# ragas>=0.1.0                   # Uncomment when starting Phase 6
+# datasets>=2.18.0               # Uncomment when starting Phase 6
