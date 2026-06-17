@@ -71,3 +71,12 @@ htmlcov/
 *.tar.gz
 *.bak
 *.tmp
+
+# ── Internal Planning & Scratch Files ─────────────────────────
+UPGRADE_PLAN
+debug_retrieval.py
+test_phase3.py
+test_grafana_query.py
+
+# ── Eval Results (generated output, not source) ───────────────
+eval/results/

@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What is the standard curing time for high-strength concrete?",
+    "answer": "High-strength concrete typically requires a curing period of 7 to 14 days, though it can continue to gain strength for up to 28 days depending on the mix design and environmental conditions."
+  },
+  {
+    "question": "What are the primary safety requirements for erecting steel scaffolding?",
+    "answer": "Safety requirements for steel scaffolding include a solid foundation, use of base plates and mudsills, plumb and level vertical members, proper cross-bracing, and the installation of guardrails and toe boards on all open sides of platforms."
+  },
+  {
+    "question": "How does a slump test measure concrete consistency?",
+    "answer": "A slump test measures the workability of fresh concrete by filling a conical mold, lifting the mold, and measuring how far the concrete slumps. A higher slump indicates a wetter, more workable mix."
+  },
+  {
+    "question": "What is the purpose of rebar in reinforced concrete structures?",
+    "answer": "Rebar (reinforcing steel) is embedded in concrete to provide tensile strength, which concrete lacks, helping to prevent cracking and structural failure under load."
+  },
+  {
+    "question": "What factors influence the choice of a deep foundation over a shallow foundation?",
+    "answer": "A deep foundation is chosen when surface soils are too weak or compressible to support structural loads, requiring piles or caissons to transfer the load to deeper, more competent soil or bedrock."
+  },
+  {
+    "question": "What are the OSHA requirements for fall protection in residential construction?",
+    "answer": "OSHA requires workers engaged in residential construction activities 6 feet or more above lower levels to be protected by guardrail systems, safety net systems, or personal fall arrest systems."
+  },
+  {
+    "question": "Describe the function of a vapor barrier in building envelopes.",
+    "answer": "A vapor barrier is a material used to resist the diffusion of moisture through walls, ceilings, and floors, preventing condensation within the building envelope and protecting insulation and structural integrity."
+  },
+  {
+    "question": "What is the difference between dead load and live load?",
+    "answer": "A dead load refers to the permanent, stationary weight of the building components themselves (e.g., walls, floors, roof), whereas a live load is the temporary or transient weight of occupants, furniture, and environmental factors like snow."
+  },
+  {
+    "question": "How do you mitigate thermal bridging in a steel-framed building?",
+    "answer": "Thermal bridging can be mitigated by installing continuous exterior insulation over the steel framing to break the direct thermal connection between the exterior and interior."
+  },
+  {
+    "question": "What is the role of a project manager in a construction project?",
+    "answer": "A construction project manager is responsible for planning, coordinating, budgeting, and supervising the project from early development to completion, ensuring it meets time, cost, and quality standards."
+  },
+  {
+    "question": "What are the common causes of delayed construction schedules?",
+    "answer": "Common causes include adverse weather conditions, supply chain disruptions, design changes or errors, permitting delays, and labor shortages."
+  },
+  {
+    "question": "Explain the concept of BIM (Building Information Modeling).",
+    "answer": "BIM is a digital representation of the physical and functional characteristics of a facility, serving as a shared knowledge resource for information about a building to facilitate decision-making throughout its lifecycle."
+  },
+  {
+    "question": "What is the minimum slope required for a flat roof to ensure proper drainage?",
+    "answer": "The standard minimum slope for a 'flat' roof is 1/4 inch per foot (2%) to ensure adequate water runoff and prevent ponding."
+  },
+  {
+    "question": "What materials are typically used for acoustic insulation in commercial buildings?",
+    "answer": "Common materials for acoustic insulation include fiberglass batt, mineral wool, acoustic foam panels, and mass-loaded vinyl, which work by absorbing sound waves or blocking sound transmission."
+  },
+  {
+    "question": "How does LEED certification impact building design?",
+    "answer": "LEED certification requires building designs to incorporate sustainable practices, such as energy and water efficiency, use of sustainable materials, and improved indoor environmental quality, to reduce environmental impact."
+  },
+  {
+    "question": "What is the purpose of a geotechnical survey?",
+    "answer": "A geotechnical survey investigates the soil, rock, and groundwater conditions of a site to provide essential data for designing safe and cost-effective foundations and earthworks."
+  },
+  {
+    "question": "What are the advantages of using prefabricated construction components?",
+    "answer": "Prefabricated components offer advantages such as faster construction times, improved quality control in a factory setting, reduced site waste, and potentially lower overall costs."
+  },
+  {
+    "question": "What is a retaining wall and when is it necessary?",
+    "answer": "A retaining wall is a structure designed to hold back soil and prevent erosion or collapse, typically necessary when there is a significant change in elevation or steep slope on a site."
+  },
+  {
+    "question": "Explain the critical path method (CPM) in construction scheduling.",
+    "answer": "The Critical Path Method (CPM) is a project modeling technique that identifies the longest sequence of dependent tasks, helping managers determine the shortest possible project duration and which tasks are critical to keep on schedule."
+  },
+  {
+    "question": "What are the primary differences between Type I and Type V construction?",
+    "answer": "Type I construction is highly fire-resistive, using non-combustible materials like steel and concrete (e.g., high-rises), while Type V is primarily wood-framed and combustible, typically used for single-family homes."
+  },
+  {
+    "question": "How do you ensure proper compaction of fill dirt?",
+    "answer": "Proper compaction is ensured by placing the fill in thin lifts (layers), adding the correct amount of moisture, and using mechanical compactors like sheepsfoot rollers or plate compactors until the specified density is achieved."
+  },
+  {
+    "question": "What is the function of a weep hole in masonry construction?",
+    "answer": "Weep holes are small openings left in the outer wall of masonry construction to allow moisture that has penetrated the wall cavity to drain out, preventing water damage and mold."
+  },
+  {
+    "question": "What are the key components of a commercial HVAC system?",
+    "answer": "Key components typically include chillers, boilers, cooling towers, air handling units (AHUs), ductwork, and control systems to regulate temperature, humidity, and air quality."
+  },
+  {
+    "question": "What is the difference between a change order and an RFI?",
+    "answer": "An RFI (Request for Information) is used to clarify design details or resolve ambiguities, whereas a change order is a formal document that alters the scope of work, schedule, or cost of the contract."
+  },
+  {
+    "question": "Why is proper site drainage important before beginning foundation work?",
+    "answer": "Proper site drainage prevents water accumulation, which can weaken the soil bearing capacity, cause trench collapse, and lead to water intrusion issues in the finished foundation."
+  }
+]

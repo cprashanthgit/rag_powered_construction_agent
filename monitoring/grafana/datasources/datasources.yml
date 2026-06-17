@@ -1,29 +1,34 @@
 apiVersion: 1
 
-# ── Auto-provisioned Data Sources ──────────────────────────────────────
+# ── Auto-provisioned Data Sources ────────────────────────────────────
 # Grafana reads this file on startup and creates these data sources
 # automatically. You will NOT need to add them manually in the UI.
+# NOTE: Grafana does NOT support bash ${VAR:-default} syntax here.
+#       Always use literal values or simple $VAR references.
 
 datasources:
 
-  # ── Prometheus ─────────────────────────────────────────────────────
+  # ── Prometheus ──────────────────────────────────────────────
   # Used for all RAG metrics: query count, latency, cache hits, etc.
   - name: Prometheus
+    uid: cnst-prometheus
     type: prometheus
     url: http://prometheus:9090    # uses Docker service name (not localhost)
     isDefault: true
     editable: false
 
-  # ── PostgreSQL ─────────────────────────────────────────────────────
+  # ── PostgreSQL ──────────────────────────────────────────────
   # Used for business metrics: feedback satisfaction %, query logs, etc.
   - name: PostgreSQL
+    uid: cnst-postgres
     type: postgres
     url: postgres:5432             # uses Docker service name
     database: cnst_rag
     user: cnst_user
     secureJsonData:
-      password: "${POSTGRES_PASSWORD:-devpassword123}"
+      password: "devpassword123"   # matches POSTGRES_PASSWORD in docker-compose.yml
     jsonData:
       sslmode: disable
       postgresVersion: 1600        # PostgreSQL 16
     editable: false
+    version: 1
