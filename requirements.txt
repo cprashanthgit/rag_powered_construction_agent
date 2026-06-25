@@ -67,5 +67,5 @@ prometheus-fastapi-instrumentator>=6.1.0  # Auto-exposes /metrics on FastAPI
 # ------------------------------------------------------------------------------
 # PHASE 6 - RAGAS Evaluation
 # ------------------------------------------------------------------------------
-# ragas>=0.1.0                   # Uncomment when starting Phase 6
-# datasets>=2.18.0               # Uncomment when starting Phase 6
+ragas>=0.1.0                    # LLM-as-judge evaluation framework
+datasets>=2.18.0                # HuggingFace datasets (used by RAGAS internally)
