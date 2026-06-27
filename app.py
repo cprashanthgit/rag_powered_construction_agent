@@ -26,8 +26,21 @@ import httpx
 import streamlit as st
 
 # ── Config ─────────────────────────────────────────────────────────────────────
-API_BASE = "http://localhost:8000"
+import os
+
+# ── Backend URL — configurable for cloud deployment ────────────────────────────
+# Priority:  1. Streamlit Secrets (for Streamlit Community Cloud)
+#            2. Environment variable API_BASE_URL (for Docker/EC2)
+#            3. localhost:8000 (local development default)
+def _get_api_base() -> str:
+    try:
+        return st.secrets["API_BASE_URL"]          # Streamlit Cloud secret
+    except Exception:
+        return os.environ.get("API_BASE_URL", "http://localhost:8000")
+
+API_BASE = _get_api_base()
 TIMEOUT  = 120  # seconds — long enough for a cold-start LLM response
+
 
 # ── Page setup ─────────────────────────────────────────────────────────────────
 st.set_page_config(

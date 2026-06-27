@@ -1,0 +1,131 @@
+# ══════════════════════════════════════════════════════════════════════
+#  Construction RAG Assistant — CLOUD Production Stack
+#  deploy/docker-compose.cloud.yml
+#
+#  All paths are relative to this file's location (deploy/).
+#  Run from the PROJECT ROOT:
+#    docker compose -f deploy/docker-compose.cloud.yml up -d --build
+#    docker compose -f deploy/docker-compose.cloud.yml logs -f api
+#    docker compose -f deploy/docker-compose.cloud.yml down
+#
+#  Before running:
+#    1. Copy deploy/.env.cloud.example → deploy/.env.prod and fill in values
+#    2. Upload vector_store/chunks.pkl to the VM
+#    3. Set your domain in deploy/nginx.conf
+#    4. Run certbot to get SSL cert
+# ══════════════════════════════════════════════════════════════════════
+
+services:
+
+  # ── FastAPI Backend (RAG API) ─────────────────────────────────────────
+  api:
+    build:
+      context: ..                      # Project root — so COPY commands work
+      dockerfile: deploy/Dockerfile    # Relative to project root
+    container_name: cnst_api
+    env_file: ./deploy/.env.prod       # Secrets file (NOT committed to git)
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    volumes:
+      # Pre-built vector index — upload chunks.pkl to VM before first run
+      - ../vector_store:/app/vector_store:ro
+      # Cross-encoder model cache — persists across container restarts
+      - model_cache:/root/.cache
+    restart: unless-stopped
+    expose:
+      - "8000"                         # Internal only — nginx proxies port 443 → here
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s               # Give time for model load on first start
+
+  # ── Nginx Reverse Proxy (HTTPS) ───────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: cnst_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  # ── Redis (Semantic Cache + Session Memory) ───────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: cnst_redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ── PostgreSQL (Query Logs + Users) ───────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: cnst_postgres
+    environment:
+      POSTGRES_DB:       cnst_rag
+      POSTGRES_USER:     cnst_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cnst_user -d cnst_rag"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Prometheus (Metrics Collection) ───────────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: cnst_prometheus
+    volumes:
+      - ./prometheus.cloud.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=14d'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+
+  # ── Grafana (Observability Dashboard) ─────────────────────────────────
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: cnst_grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - postgres
+    environment:
+      GF_SECURITY_ADMIN_USER:     admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_USERS_ALLOW_SIGN_UP:     "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ../monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ../monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  postgres_data:
+  prometheus_data:
+  grafana_data:
+  model_cache:
