@@ -31,8 +31,10 @@ build/
 # ── Vector Store (large binary files, rebuild with build_index.py)
 vector_store/
 *.faiss
-*.pkl
 *.index
+# *.pkl is excluded globally, but chunks.pkl is small (5MB) and required
+# for BM25 hybrid search on cloud — explicitly allow it:
+!vector_store/chunks.pkl
 
 # ── Data / Source Documents (large PDFs) ──────────────────────
 # Add your own PDFs to data/ locally; do not commit them.
