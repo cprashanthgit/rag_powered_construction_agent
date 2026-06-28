@@ -1,0 +1,28 @@
+apiVersion: 1
+
+datasources:
+  # ── PostgreSQL — query logs, user activity, feedback ────────────────
+  - name: PostgreSQL
+    type: postgres
+    uid: cnst-postgres
+    url: postgres:5432
+    database: cnst_rag
+    user: cnst_user
+    secureJsonData:
+      password: $POSTGRES_PASSWORD      # Reads from container env var automatically
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1600             # PostgreSQL 16
+      timescaledb: false
+    editable: true
+
+  # ── Prometheus — API metrics, latency, request rates ────────────────
+  - name: Prometheus
+    type: prometheus
+    uid: cnst-prometheus
+    url: http://prometheus:9090
+    access: proxy
+    isDefault: true
+    jsonData:
+      httpMethod: POST
+    editable: true

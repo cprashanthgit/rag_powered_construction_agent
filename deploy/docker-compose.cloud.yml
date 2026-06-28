@@ -23,7 +23,7 @@ services:
       context: ..                      # Project root — so COPY commands work
       dockerfile: deploy/Dockerfile    # Relative to project root
     container_name: cnst_api
-    env_file: ./deploy/.env.prod       # Secrets file (NOT committed to git)
+    env_file: ./.env.prod             # Secrets file (NOT committed to git)
     depends_on:
       redis:
         condition: service_healthy
@@ -117,6 +117,7 @@ services:
       GF_SECURITY_ADMIN_USER:     admin
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
       GF_USERS_ALLOW_SIGN_UP:     "false"
+      POSTGRES_PASSWORD:          ${POSTGRES_PASSWORD}  # Used by provisioning/datasources/datasources.yaml
     volumes:
       - grafana_data:/var/lib/grafana
       - ../monitoring/grafana/datasources:/etc/grafana/provisioning/datasources

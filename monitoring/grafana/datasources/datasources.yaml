@@ -1,0 +1,31 @@
+apiVersion: 1
+
+datasources:
+  # ── PostgreSQL — query logs, user activity, feedback ────────────────────
+  # Grafana's lib/pq driver requires md5 password auth (not scram-sha-256).
+  # Fix on VM: docker exec cnst_postgres psql -U cnst_user -d cnst_rag -c
+  #   "SET password_encryption='md5'; ALTER USER cnst_user WITH PASSWORD '...';"
+  - name: PostgreSQL
+    type: postgres
+    uid: cnst-postgres
+    url: postgres:5432
+    database: cnst_rag
+    user: cnst_user
+    secureJsonData:
+      password: $POSTGRES_PASSWORD        # Injected from Grafana container env
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1600               # PostgreSQL 16
+      timescaledb: false
+    editable: true
+
+  # ── Prometheus — API metrics, latency, request rates ────────────────────
+  - name: Prometheus
+    type: prometheus
+    uid: cnst-prometheus
+    url: http://prometheus:9090
+    access: proxy
+    isDefault: true
+    jsonData:
+      httpMethod: POST
+    editable: true
