@@ -19,10 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Install Python dependencies first (layer is cached if requirements.txt unchanged)
-COPY requirements.txt .
+# Install Python dependencies first (layer is cached if requirements-api.txt unchanged)
+COPY requirements-api.txt .
 RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir -r requirements.txt
+ && pip install --no-cache-dir -r requirements-api.txt
 
 # Copy application source files
 COPY api.py              ./api.py

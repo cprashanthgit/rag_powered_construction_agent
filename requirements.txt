@@ -1,71 +1,12 @@
-# Construction Knowledge Assistant - Python Dependencies
-# Install: pip install -r requirements.txt
+# ══════════════════════════════════════════════════════════════════════
+# requirements.txt — Streamlit Cloud (UI frontend only)
+#
+# app.py is a pure HTTP frontend that calls the GCP backend API.
+# It only needs streamlit and httpx — no ML packages needed here.
+#
+# Full ML/RAG dependencies (faiss, torch, langchain, etc.) are in:
+#   requirements-api.txt  → used by deploy/Dockerfile on GCP VM
+# ══════════════════════════════════════════════════════════════════════
 
-# -- Core LangChain -------------------------------------------------------------
-langchain==0.3.25
-langchain-community==0.3.23
-
-# -- LangChain integrations (new) -----------------------------------------------
-langchain-openai>=0.3.0          # OpenAI embeddings + LLM (demo day switch)
-langchain-pinecone>=0.2.0        # LangChain ↔ Pinecone adapter
-
-# -- Vector Store ---------------------------------------------------------------
-faiss-cpu==1.10.0                # local FAISS (still used when VECTOR_BACKEND=faiss)
-pinecone-client>=5.0.0           # Pinecone cloud vector DB
-
-# -- Embeddings -----------------------------------------------------------------
-sentence-transformers==4.1.0     # HuggingFace embeddings + CrossEncoder re-ranker
-
-# -- Hybrid search (sparse retrieval) ------------------------------------------
-rank-bm25>=0.2.2                 # BM25 sparse retriever for hybrid search
-
-# -- LLM / Transformers (local HuggingFace backend) ----------------------------
-transformers==4.51.3
-torch==2.6.0
-
-# -- OpenAI (API-based LLM + embedding backend) --------------------------------
-openai==1.72.0
-
-# -- FastAPI inference layer ----------------------------------------------------
-fastapi>=0.115.0
-uvicorn[standard]>=0.34.0
-httpx>=0.27.0                    # async HTTP client (used by FastAPI internals)
-
-# -- UI -------------------------------------------------------------------------
-streamlit==1.44.1                # existing Streamlit UI (still works)
-
-# -- Environment config ---------------------------------------------------------
-python-dotenv==1.1.0
-
-# -- PDF Parsing ----------------------------------------------------------------
-pypdf==5.4.0
-
-# ------------------------------------------------------------------------------
-# PHASE 1 - Observability
-# ------------------------------------------------------------------------------
-langsmith>=0.1.0                 # LangSmith AI tracing (free tier: 5k traces/month)
-
-# ------------------------------------------------------------------------------
-# PHASE 3 - Redis (session memory + semantic cache)
-# ------------------------------------------------------------------------------
-redis>=5.0.3                     # Redis client for session store and semantic cache
-numpy>=1.26.0                    # Cosine similarity in semantic_cache.py
-
-# ------------------------------------------------------------------------------
-# PHASE 4 - PostgreSQL + JWT Auth
-# ------------------------------------------------------------------------------
-asyncpg>=0.29.0                  # Async PostgreSQL driver
-bcrypt>=4.0.0                    # Password hashing for user accounts
-PyJWT>=2.8.0                     # JWT token encode/decode
-
-# ------------------------------------------------------------------------------
-# PHASE 5 - Prometheus Metrics
-# ------------------------------------------------------------------------------
-prometheus-client>=0.20.0        # Prometheus metrics exporter
-prometheus-fastapi-instrumentator>=6.1.0  # Auto-exposes /metrics on FastAPI
-
-# ------------------------------------------------------------------------------
-# PHASE 6 - RAGAS Evaluation
-# ------------------------------------------------------------------------------
-ragas>=0.1.0                    # LLM-as-judge evaluation framework
-datasets>=2.18.0                # HuggingFace datasets (used by RAGAS internally)
+streamlit>=1.40.0
+httpx>=0.27.0
