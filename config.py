@@ -112,10 +112,13 @@ RERANKER_MODEL:   str  = os.getenv(
 )
 
 # ── Startup validation ─────────────────────────────────────────────────────────
+# NOTE: data/ directory is only required for build_index.py (ingestion).
+# The API server uses Pinecone for vector search — no PDFs needed at runtime.
 if not DATA_DIR.exists():
-    raise FileNotFoundError(
-        f"Data directory not found: {DATA_DIR.resolve()}. "
-        "Create ./data/ and add your PDFs."
+    print(
+        f"[config] WARNING: Data directory not found: {DATA_DIR.resolve()}. "
+        "This is expected in cloud/API-only deployments (Pinecone handles vectors). "
+        "Only needed if running build_index.py to re-ingest PDFs."
     )
 
 if LLM_BACKEND not in VALID_LLM_BACKENDS:
