@@ -1,0 +1,7 @@
+# ── Streamlit Cloud requirements (UI only) ────────────────────────────────────
+# app.py is a pure HTTP frontend — it calls the GCP backend API.
+# All ML/RAG packages (faiss, torch, langchain, etc.) run on the GCP VM.
+# This file is used by Streamlit Cloud instead of the full requirements.txt.
+
+streamlit>=1.40.0
+httpx>=0.27.0
